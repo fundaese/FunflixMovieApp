@@ -55,4 +55,20 @@ class MovieViewModel
     fun refreshData() {
         getMovies()
     }
+
+    fun fetchNowPlayingMovies() {
+        launch {
+            val nowPlayingMoviesResponse = apiRepository.getNowPlayingList(1)
+            if (nowPlayingMoviesResponse.isSuccessful) {
+                nowPlayingMoviesResponse.body()!!.results.let {
+                    moviesError.value = false
+                    moviesLoading.value = false
+                    _nowPlayingMovies.postValue(it)
+                }
+            } else {
+                moviesError.value = true
+                moviesLoading.value = false
+            }
+        }
+    }
 }

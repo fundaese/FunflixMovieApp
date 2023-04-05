@@ -8,4 +8,5 @@ class ApiRepository @Inject constructor(
 ) {
     suspend fun getUpcomingMoviesList(page: Int) = apiService.getUpcomingMoviesList(page)
     suspend fun getMovieDetails(id: Int) = apiService.getMovieDetails(id)
+    suspend fun getNowPlayingList(page: Int) = apiService.getNowPlayingMovies(page)
 }

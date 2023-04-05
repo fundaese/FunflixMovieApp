@@ -13,17 +13,22 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.funflixmovieapp.adapter.ImageSliderAdapter
 import com.example.funflixmovieapp.adapter.MovieAdapter
 import com.example.funflixmovieapp.databinding.FragmentMovieBinding
+import com.example.funflixmovieapp.model.NowPlaying
 import com.example.funflixmovieapp.viewmodel.MovieViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import me.relex.circleindicator.CircleIndicator
 
 @AndroidEntryPoint
 class MovieFragment : Fragment() {
 
     private var _binding: FragmentMovieBinding? = null
     private val binding get() = _binding!!
+
     private lateinit var movieAdapter: MovieAdapter
+    private lateinit var adapter: ImageSliderAdapter
 
     private val viewModel: MovieViewModel by viewModels()
 
@@ -73,6 +78,7 @@ class MovieFragment : Fragment() {
 
         observeLiveData()
         setupRecyclerView()
+        setupViewPager()
     }
 
     private fun setupRecyclerView() {
@@ -95,6 +101,18 @@ class MovieFragment : Fragment() {
             findNavController().navigate(directions)
         }
     }
+
+    private fun setupViewPager() {
+        viewModel.fetchNowPlayingMovies()
+        adapter = ImageSliderAdapter(requireContext(), emptyList())
+
+
+        adapter.setOnItemClickListener {
+            val directions = MovieFragmentDirections.actionMovieFragmentToMovieDetailsFragment(it.id!!)
+            findNavController().navigate(directions)
+        }
+    }
+
 
     private fun observeLiveData() {
         viewModel._response.observe(viewLifecycleOwner, Observer { movies ->
@@ -127,6 +145,12 @@ class MovieFragment : Fragment() {
                 }
             }
         })
+
+        viewModel.nowPlayingMovies.observe(viewLifecycleOwner) { movies ->
+            adapter = ImageSliderAdapter(requireContext(), movies)
+            binding.viewPager.adapter = adapter
+            binding.indicator.setViewPager(binding.viewPager)
+        }
     }
 
     override fun onDestroyView() {

@@ -16,4 +16,9 @@ interface ApiService {
 
     @GET("movie/{movie_id}?api_key=$API_KEY")
     suspend fun getMovieDetails(@Path("movie_id") id: Int): Response<MovieDetails>
+
+    @GET("movie/now_playing?api_key=$API_KEY")
+    suspend fun getNowPlayingMovies(
+        @Query("page") page: Int
+    ): Response<NowPlaying>
 }

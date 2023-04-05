@@ -81,4 +81,12 @@ dependencies {
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
     implementation "androidx.preference:preference:1.1.0"
+
+    //Viewpager Implementation
+    implementation 'androidx.viewpager2:viewpager2:1.0.0'
+
+    //CircleIndicator
+    implementation 'me.relex:circleindicator:2.1.6'
+
+
 }
